@@ -1,6 +1,5 @@
 from copy import deepcopy
 import ccxt
-import datetime
 
 
 DEPOSIT = 1000  # Money we have in the account
