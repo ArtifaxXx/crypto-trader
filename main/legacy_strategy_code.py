@@ -87,15 +87,22 @@ def bot_strategy(price_list, deposit, step, initial_commitment, profit_gap):
     return (deposit + tokens*price_list[-1]) - initial_deposit
 
 
-print("Buy Scenario 1 profit: %s" % buy_with_sl(SCENARIO1_PRICE_LIST, DEPOSIT))
-print("Bot Scenario 1 profit: %s" % bot_strategy(SCENARIO1_PRICE_LIST, DEPOSIT, BOT_STEP, INITIAL_COMMITMENT, PROFIT_GAP))
-print("Buy Scenario 2 profit: %s" % buy_with_sl(SCENARIO2_PRICE_LIST, DEPOSIT))
-print("Bot Scenario 2 profit: %s" % bot_strategy(SCENARIO2_PRICE_LIST, DEPOSIT, BOT_STEP, INITIAL_COMMITMENT, PROFIT_GAP))
-print("Buy Scenario 3 profit: %s" % buy_with_sl(SCENARIO3_PRICE_LIST, DEPOSIT))
-print("Bot Scenario 3 profit: %s" % bot_strategy(SCENARIO3_PRICE_LIST, DEPOSIT, BOT_STEP, INITIAL_COMMITMENT, PROFIT_GAP))
-print("Buy Scenario 4 profit: %s" % buy_with_sl(SCENARIO4_PRICE_LIST, DEPOSIT))
-print("Bot Scenario 4 profit: %s" % bot_strategy(SCENARIO4_PRICE_LIST, DEPOSIT, BOT_STEP, INITIAL_COMMITMENT, PROFIT_GAP))
-print("Buy Scenario 5 profit: %s" % buy_with_sl(get_binance_history_data('1h', 'TRX/BNB'), DEPOSIT))
-print("Bot Scenario 5 profit: %s" % bot_strategy(get_binance_history_data('1h', 'TRX/BNB'), DEPOSIT, BOT_STEP, INITIAL_COMMITMENT, PROFIT_GAP))
+def main():
+    print("Buy Scenario 1 profit: %s" % buy_with_sl(SCENARIO1_PRICE_LIST, DEPOSIT))
+    print("Bot Scenario 1 profit: %s" % bot_strategy(SCENARIO1_PRICE_LIST, DEPOSIT, BOT_STEP, INITIAL_COMMITMENT,
+                                                     PROFIT_GAP))
+    print("Buy Scenario 2 profit: %s" % buy_with_sl(SCENARIO2_PRICE_LIST, DEPOSIT))
+    print("Bot Scenario 2 profit: %s" % bot_strategy(SCENARIO2_PRICE_LIST, DEPOSIT, BOT_STEP, INITIAL_COMMITMENT,
+                                                     PROFIT_GAP))
+    print("Buy Scenario 3 profit: %s" % buy_with_sl(SCENARIO3_PRICE_LIST, DEPOSIT))
+    print("Bot Scenario 3 profit: %s" % bot_strategy(SCENARIO3_PRICE_LIST, DEPOSIT, BOT_STEP, INITIAL_COMMITMENT,
+                                                     PROFIT_GAP))
+    print("Buy Scenario 4 profit: %s" % buy_with_sl(SCENARIO4_PRICE_LIST, DEPOSIT))
+    print("Bot Scenario 4 profit: %s" % bot_strategy(SCENARIO4_PRICE_LIST, DEPOSIT, BOT_STEP, INITIAL_COMMITMENT,
+                                                     PROFIT_GAP))
+    print("Buy Scenario 5 profit: %s" % buy_with_sl(get_binance_history_data('1h', 'TRX/BNB'), DEPOSIT))
+    print("Bot Scenario 5 profit: %s" % bot_strategy(get_binance_history_data('1h', 'TRX/BNB'), DEPOSIT, BOT_STEP,
+                                                     INITIAL_COMMITMENT, PROFIT_GAP))
 
-# get_binance_history_data('1d', 'TRX/BNB')
+if __name__ == "__main__":
+    main()
