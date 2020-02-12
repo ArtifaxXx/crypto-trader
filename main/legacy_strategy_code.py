@@ -104,5 +104,6 @@ def main():
     print("Bot Scenario 5 profit: %s" % bot_strategy(get_binance_history_data('1h', 'TRX/BNB'), DEPOSIT, BOT_STEP,
                                                      INITIAL_COMMITMENT, PROFIT_GAP))
 
+
 if __name__ == "__main__":
     main()
