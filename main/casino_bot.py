@@ -43,8 +43,9 @@ def execute_casino_bot_simulation(exchange='binance',
 
     # Get market price and execute the order
     initial_price = price_list[0]
-    deposit_spent = entry_commitment + entry_commitment * commission
-    tokens_bought = entry_commitment / initial_price
+    deposit_spent = entry_commitment + entry_commitment * commission #получается, что при первой покупке тратим 1+1,001=2,001?
+   # deposit_spent = deposit_spent + entry_commitment * commission       может так?
+    tokens_bought = entry_commitment / initial_price #пока мы должны считать, а потом данные будем брать с биржи!
 
     # Set sell price and update initial parameters
     initial_sell_price = recalculate_casino_bot_sell_price(0,
