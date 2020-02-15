@@ -35,14 +35,12 @@ def execute_casino_bot_simulation(exchange='binance',
     deposit = initial_deposit
     tokens = 0
 
-    # Get exchange data
+    # Get exchange data and extract candles
     exchange_data = get_exchange_data(exchange, ticker, his_data_frequency)
-
-    # Convert data to prices
-    price_list = [x[1] for x in exchange_data['candle_data']]
+    candle_list = exchange_data['candle_data'][-batch_size:]
 
     # Get market price and execute the order
-    initial_price = price_list[0]
+    initial_price = candle_list[0][4]
     deposit_spent = entry_commitment + entry_commitment * commission
     tokens_bought = entry_commitment / initial_price
 
@@ -62,6 +60,14 @@ def execute_casino_bot_simulation(exchange='binance',
                                                             buy_order_factor,
                                                             initial_price,
                                                             buy_order_spread)
+
+    # Iterate over candles
+    # Compare candle data with our orders and convert accordingly
+    # Cases:
+    #   if end of the candle data - exit, report results
+    #   sell order has executed - exit, report results
+    #   buy orders were executed - redo the sell
+    #   if none, continue
 
     return buy_orders
 
