@@ -13,6 +13,9 @@ def test_recalculate_casino_bot_sell_price():
     with pytest.raises(Exception):
         assert recalculate_casino_bot_sell_price(0, 0, 0, 0, 0, 0)
 
-    assert round(recalculate_casino_bot_sell_price(0, 0, 1, 1, 0, 0)) == 1
-    assert round(recalculate_casino_bot_sell_price(0, 0, 1, 1000, 0.1, 0.05)) == 1150
-    assert round(recalculate_casino_bot_sell_price(1, 10, 2, 5, 0.1, 0), 1) == 7.3
+    assert round(recalculate_casino_bot_sell_price(0, 0, 1, 1, 0, 0)[0]), \
+        round(recalculate_casino_bot_sell_price(0, 0, 1, 1, 0, 0)[1]) == (1, 1)
+    assert round(recalculate_casino_bot_sell_price(0, 0, 1, 1000, 0.1, 0.05)[0]), \
+        round(recalculate_casino_bot_sell_price(0, 0, 1, 1000, 0.1, 0.05)[1]) == (1000, 1150)
+    assert round(recalculate_casino_bot_sell_price(1, 10, 2, 5, 0.1, 0)[0], 1), \
+        round(recalculate_casino_bot_sell_price(1, 10, 2, 5, 0.1, 0)[1], 1) == 6.9

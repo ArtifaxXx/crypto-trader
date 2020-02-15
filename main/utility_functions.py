@@ -28,13 +28,13 @@ def get_exchange_data(exchange_name, ticker, frequency='1h'):
 
 
 def recalculate_casino_bot_sell_price(previous_tokens_purchased,
-                                      previous_price,
+                                      previous_average_price,
                                       new_token_purchased,
                                       new_price,
                                       profit_margin,
                                       commission):
-    # TODO: @phoenixkr to review the logic here
-    required_profit = (previous_tokens_purchased * previous_price + new_token_purchased * new_price) * \
-                      (1 + profit_margin + commission)
-    new_sell_price = required_profit / (previous_tokens_purchased + new_token_purchased)
-    return new_sell_price
+    new_average_price = (previous_tokens_purchased * previous_average_price + new_token_purchased * new_price) / \
+                        (previous_tokens_purchased + new_token_purchased)
+    new_sell_price = new_average_price * (1 + profit_margin + commission)
+
+    return new_average_price, new_sell_price
