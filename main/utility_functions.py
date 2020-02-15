@@ -41,7 +41,7 @@ def recalculate_casino_bot_sell_price(previous_tokens_purchased,
     return new_average_price, new_sell_price
 
 
-def create_casino_bot_buy_order_net(deposit, entry_commitment, buy_order_factor, initial_price, buy_order_spread):
+def create_casino_bot_simulation_buy_order_net(deposit, entry_commitment, buy_order_factor, initial_price, buy_order_spread):
     buy_orders = []
     deposit_used = 0
     for i in count(0):  # this is an infinite loop

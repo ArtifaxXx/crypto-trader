@@ -1,4 +1,4 @@
-from utility_functions import get_exchange_data, recalculate_casino_bot_sell_price, create_casino_bot_buy_order_net
+from utility_functions import get_exchange_data, recalculate_casino_bot_sell_price, create_casino_bot_simulation_buy_order_net
 
 
 def execute_casino_bot():
@@ -35,12 +35,11 @@ def execute_casino_bot_simulation(exchange='binance',
     deposit = initial_deposit
     tokens = 0
 
-
     # Get exchange data
     exchange_data = get_exchange_data(exchange, ticker, his_data_frequency)
 
     # Convert data to prices
-    price_list = [x[4] for x in exchange_data['candle_data']]
+    price_list = [x[1] for x in exchange_data['candle_data']]
 
     # Get market price and execute the order
     initial_price = price_list[0]
@@ -58,11 +57,11 @@ def execute_casino_bot_simulation(exchange='binance',
     tokens += tokens_bought
 
     # Create buy order net
-    buy_orders = create_casino_bot_buy_order_net(deposit,
-                                                 entry_commitment,
-                                                 buy_order_factor,
-                                                 initial_price,
-                                                 buy_order_spread)
+    buy_orders = create_casino_bot_simulation_buy_order_net(deposit,
+                                                            entry_commitment,
+                                                            buy_order_factor,
+                                                            initial_price,
+                                                            buy_order_spread)
 
     return buy_orders
 
