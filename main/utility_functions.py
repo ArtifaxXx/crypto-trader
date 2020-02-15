@@ -52,3 +52,34 @@ def create_casino_bot_simulation_buy_order_net(deposit, entry_commitment, buy_or
         cur_buy_order_price = round(initial_price * (1 - buy_order_spread*(i+1)), 6)
         buy_orders.append((next_order_commitment, cur_buy_order_price))  # add an order entry
     return buy_orders
+
+
+def casino_bot_cycle(candle_list, buy_orders, deposit, tokens, sell_price, average_price, commission, profit_margin):
+    cycles = 1
+    orders_executed = 0
+    for candle in candle_list[1:]:  # Starting from 2nd candle
+        cycles += 1
+        if candle[2] > sell_price:  # We have sold at our sell price, break cycle
+            deposit += sell_price * tokens - sell_price * tokens * commission
+            tokens -= tokens
+            print('Sell executed. Terminating')
+            break
+        if orders_executed == len(buy_orders):
+            break
+        if candle[3] < buy_orders[orders_executed][1]:  # Lowest price hit bellow our highest order
+            print('Executing buy orders')
+            for order in buy_orders[orders_executed:]:  # Check which orders got executed
+                if candle[3] < order[1]:  # if order executed
+                    tokens += order[0]  # add tokens bought
+                    deposit -= (order[0] * order[1] + order[0] * order[1] * commission)  # subtract deposit spent
+                    orders_executed += 1  # increment executed orders number
+                    # For every executed order we recalculate our sell price
+                    average_price, sell_price = recalculate_casino_bot_sell_price(tokens,
+                                                                                  average_price,
+                                                                                  order[0],
+                                                                                  order[1],
+                                                                                  profit_margin,
+                                                                                  commission)
+            print('%i buy orders executed' % orders_executed)
+
+    return deposit, tokens, cycles
