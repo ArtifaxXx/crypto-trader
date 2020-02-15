@@ -22,7 +22,7 @@ def execute_casino_bot():
 
 def execute_casino_bot_simulation(exchange='binance',
                                   ticker='TRX/BNB',
-                                  commission=0.001, # exchange commission per operation
+                                  commission=0.001,  # exchange commission per operation
                                   batch_size=500,  # number of historic data points, 500 per page
                                   his_data_frequency='1h',  # frequency of historic data
                                   initial_deposit=1000,
@@ -45,12 +45,12 @@ def execute_casino_bot_simulation(exchange='binance',
     tokens_bought = entry_commitment / initial_price
 
     # Set average and sell price and update initial parameters
-    new_average_price, initial_sell_price = recalculate_casino_bot_sell_price(0,
-                                                                              0,
-                                                                              tokens_bought,
-                                                                              initial_price,
-                                                                              profit_margin,
-                                                                              commission)
+    average_price, initial_sell_price = recalculate_casino_bot_sell_price(0,
+                                                                          0,
+                                                                          tokens_bought,
+                                                                          initial_price,
+                                                                          profit_margin,
+                                                                          commission)
     deposit -= deposit_spent
     tokens += tokens_bought
 
@@ -64,12 +64,42 @@ def execute_casino_bot_simulation(exchange='binance',
     # Iterate over candles
     # Compare candle data with our orders and convert accordingly
     # Cases:
-    #   if end of the candle data - exit, report results
+    #   if end of the candle data - loop will finish
     #   sell order has executed - exit, report results
     #   buy orders were executed - redo the sell
     #   if none, continue
 
-    return buy_orders
+    '''
+            1504541580000, // UTC timestamp in milliseconds, integer
+            4235.4,        // (O)pen price, float
+            4240.6,        // (H)ighest price, float
+            4230.0,        // (L)owest price, float
+            4230.7,        // (C)losing price, float
+            37.72941911    // (V)olume (in terms of the base currency), float
+    '''
+    sell_price = initial_sell_price
+    for candle in candle_list[1:]:  # Starting from 2nd candle
+        if candle[2] > sell_price:  # We have sold at our sell price, break cycle
+            deposit += sell_price*tokens - sell_price*tokens*commission
+            tokens -= tokens_bought
+            break
+        if candle[3] < buy_orders[0][1]:  # Lowest price hit bellow our highest order
+            orders_executed = 0
+            for order in buy_orders:  # Check which orders got executed
+                if candle[3] < order[1]:  # if order executed
+                    tokens += order[0]  # add tokens bought
+                    deposit -= (order[0]*order[1] + order[0]*order[1]*commission)  # subtract deposit spent
+                    orders_executed += 1  # increment executed orders number
+                    # For every executed order we recalculate our sell price
+                    average_price, sell_price = recalculate_casino_bot_sell_price(tokens,
+                                                                                  average_price,
+                                                                                  order[0],
+                                                                                  order[1],
+                                                                                  profit_margin,
+                                                                                  commission)
+            buy_orders = buy_orders[orders_executed:]  # remove executed orders from buy_orders list
+
+    return deposit, tokens
 
 
 def main():
