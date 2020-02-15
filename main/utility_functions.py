@@ -49,6 +49,6 @@ def create_casino_bot_simulation_buy_order_net(deposit, entry_commitment, buy_or
         deposit_used += next_order_commitment
         if deposit_used > deposit:  # Check that we are not overusing our funds, stop loop if we are
             break
-        cur_buy_order_price = initial_price * (1 - buy_order_spread*(i+1))
+        cur_buy_order_price = round(initial_price * (1 - buy_order_spread*(i+1)), 6)
         buy_orders.append((next_order_commitment, cur_buy_order_price))  # add an order entry
     return buy_orders
