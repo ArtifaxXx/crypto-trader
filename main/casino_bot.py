@@ -1,4 +1,5 @@
-from utility_functions import get_exchange_data, recalculate_casino_bot_sell_price
+from utility_functions import get_exchange_data, recalculate_casino_bot_sell_price, create_casino_bot_buy_order_net
+
 
 def execute_casino_bot():
     # Inputs:
@@ -56,9 +57,14 @@ def execute_casino_bot_simulation(exchange='binance',
     deposit -= deposit_spent
     tokens += tokens_bought
 
-    # create buy order net
+    # Create buy order net
+    buy_orders = create_casino_bot_buy_order_net(deposit,
+                                                 entry_commitment,
+                                                 buy_order_factor,
+                                                 initial_price,
+                                                 buy_order_spread)
 
-    return initial_sell_price
+    return buy_orders
 
 
 def main():

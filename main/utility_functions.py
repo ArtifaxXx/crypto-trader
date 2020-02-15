@@ -1,3 +1,4 @@
+from itertools import count
 import ccxt
 
 
@@ -38,3 +39,16 @@ def recalculate_casino_bot_sell_price(previous_tokens_purchased,
     new_sell_price = new_average_price * (1 + profit_margin + commission)
 
     return new_average_price, new_sell_price
+
+
+def create_casino_bot_buy_order_net(deposit, entry_commitment, buy_order_factor, initial_price, buy_order_spread):
+    buy_orders = []
+    deposit_used = 0
+    for i in count(0):  # this is an infinite loop
+        next_order_commitment = entry_commitment * (buy_order_factor ** (i+1))  # i starts with 0
+        deposit_used += next_order_commitment
+        if deposit_used > deposit:  # Check that we are not overusing our funds, stop loop if we are
+            break
+        cur_buy_order_price = initial_price * (1 - buy_order_spread*(i+1))
+        buy_orders.append((next_order_commitment, cur_buy_order_price))  # add an order entry
+    return buy_orders
