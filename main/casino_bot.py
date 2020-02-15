@@ -49,12 +49,12 @@ def execute_casino_bot_simulation(exchange='binance',
 
     # Set average and sell price and update initial parameters
     print('Setting initial average and sell prices')
-    average_price, initial_sell_price = recalculate_casino_bot_sell_price(0,
-                                                                          0,
-                                                                          tokens_bought,
-                                                                          initial_price,
-                                                                          profit_margin,
-                                                                          commission)
+    average_price, sell_price = recalculate_casino_bot_sell_price(0,
+                                                                  0,
+                                                                  tokens_bought,
+                                                                  initial_price,
+                                                                  profit_margin,
+                                                                  commission)
     deposit -= deposit_spent
     tokens += tokens_bought
 
@@ -67,9 +67,9 @@ def execute_casino_bot_simulation(exchange='binance',
                                                             buy_order_spread)
     # iterating over historical data
     print('Starting iteration cycle')
-    sell_price = initial_sell_price
     cycles = 0
     for candle in candle_list[1:]:  # Starting from 2nd candle
+        cycles += 1
         if candle[2] > sell_price:  # We have sold at our sell price, break cycle
             deposit += sell_price*tokens - sell_price*tokens*commission
             tokens -= tokens_bought
@@ -92,7 +92,6 @@ def execute_casino_bot_simulation(exchange='binance',
                                                                                   commission)
             buy_orders = buy_orders[orders_executed:]  # remove executed orders from buy_orders list
             print('%i buy orders executed' % orders_executed)
-        cycles += 1
     print('%i cycles executed' % cycles)
 
     # returning results
@@ -101,7 +100,7 @@ def execute_casino_bot_simulation(exchange='binance',
 
 
 def main():
-    print(execute_casino_bot_simulation(his_data_frequency='1h', profit_margin=0.1))
+    print(execute_casino_bot_simulation(his_data_frequency='1m', profit_margin=0.01, ticker='KAVA/BNB'))
 
 
 if __name__ == "__main__":
