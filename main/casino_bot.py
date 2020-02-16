@@ -35,13 +35,13 @@ def execute_casino_bot_cycle(candle_list,
     tokens = 0
 
     # Get market price and execute the order
-    print('Executing initial buy order')
+    # print('Executing initial buy order')
     initial_price = candle_list[0][4]
     deposit_spent = entry_commitment + entry_commitment * commission
     tokens_bought = entry_commitment / initial_price
 
     # Set average and sell price and update initial parameters
-    print('Setting initial average and sell prices')
+    # print('Setting initial average and sell prices')
     average_price, sell_price = recalculate_casino_bot_sell_price(0,
                                                                   0,
                                                                   tokens_bought,
@@ -52,14 +52,14 @@ def execute_casino_bot_cycle(candle_list,
     tokens += tokens_bought
 
     # Create buy order net
-    print('Creating buy order net')
+    # print('Creating buy order net')
     buy_orders = create_casino_bot_simulation_buy_order_net(deposit,
                                                             entry_commitment,
                                                             buy_order_factor,
                                                             initial_price,
                                                             buy_order_spread)
     # iterating over historical data
-    print('Starting iteration cycle')
+    # print('Starting iteration cycle')
     deposit, tokens, cycles = casino_bot_cycle(candle_list,
                                                buy_orders,
                                                deposit,
@@ -85,30 +85,34 @@ def casino_bot_simulation(exchange='binance',
                           profit_margin=0.01,  # how much do we want our initial spread to be
                           buy_order_spread=0.01,  # how far apart are we putting buy orders
                           buy_order_factor=2):
-    cycles_done = 0
+    candle_price_position = 0
     tokens_bought = 0
+    deposit = initial_deposit
 
     # Get exchange data and extract candles
     print('Getting exchange data')
     exchange_data = get_exchange_data(exchange, ticker, his_data_frequency)
     candle_list = exchange_data['candle_data'][-batch_size:]
 
-    while cycles_done <= batch_size - 1:
-        deposit, tokens, cycles = execute_casino_bot_cycle(candle_list[cycles_done:],
+    while candle_price_position <= batch_size - 1:
+        deposit, tokens, cycles = execute_casino_bot_cycle(candle_list[candle_price_position:],
                                                            commission=commission,
-                                                           initial_deposit=1000,
+                                                           initial_deposit=deposit,
                                                            entry_commitment=entry_commitment,
                                                            profit_margin=profit_margin,
                                                            buy_order_spread=buy_order_spread,
                                                            buy_order_factor=buy_order_factor)
-        cycles_done += cycles
+        candle_price_position += cycles
         tokens_bought += tokens
 
-    print('Profit: %f' % (deposit - initial_deposit + tokens*exchange_data['ticker']['last']))
+    print("-----------Results------------")
+    print('Profit: %f' % (deposit - initial_deposit + tokens_bought*exchange_data['ticker']['last']))
+    print('Deposit: %f' % deposit)
+    print('Tokens: %f' % tokens)
 
 
 def main():
-    print(casino_bot_simulation(his_data_frequency='1h'))
+    print(casino_bot_simulation(his_data_frequency='1m'))
 
 
 if __name__ == "__main__":

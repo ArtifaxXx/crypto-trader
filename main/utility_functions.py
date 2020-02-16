@@ -80,6 +80,6 @@ def casino_bot_cycle(candle_list, buy_orders, deposit, tokens, sell_price, avera
                                                                                   order[1],
                                                                                   profit_margin,
                                                                                   commission)
-            print('%i buy orders executed' % orders_executed)
+    print('%i buy orders executed' % orders_executed)
 
     return deposit, tokens, cycles
