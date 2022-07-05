@@ -19,7 +19,7 @@ multidict==4.7.4
 packaging==20.1
 pluggy==0.13.1
 py==1.8.1
-pycares==3.1.1
+pycares==4.2.0
 pycodestyle==2.5.0
 pycparser==2.19
 pyflakes==2.1.1
